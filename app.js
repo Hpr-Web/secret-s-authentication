@@ -2,6 +2,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const encrypt = require("mongoose-encryption");
 
 
 app.use(express.static("public"));
@@ -13,10 +14,13 @@ main().catch(err => console.log(err));
 async function main() {
   await mongoose.connect('mongodb://127.0.0.1:27017/userDB');
 
-  const userSchema = {
+  const userSchema = new mongoose.Schema ({
     email:String,
     password:String
-  };
+  });
+
+  const secret = "secretforencryption.";
+  userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"]  });
 
   const user = mongoose.model("User", userSchema);
 
