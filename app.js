@@ -67,9 +67,14 @@ async function main() {
     }
   });
 
+  // Assuming you're using it within a route handler
   app.get("/logout", (req, res) => {
-    req.logout();
-    res.redirect("/");
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/");
+    });
   });
 
   app.post("/register", async (req, res) => {
